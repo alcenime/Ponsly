@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ponsly Debug</title>
+<style>
+  body { font-family: monospace; background: #0A0714; color: #F4F6F2; padding: 20px; word-break: break-all; }
+  h2 { color: #C8FF00; }
+  pre { background: #0E1414; padding: 16px; border-radius: 10px; white-space: pre-wrap; }
+  input { width: 100%; padding: 10px; margin: 10px 0; font-family: monospace; }
+  button { padding: 10px 20px; background: #C8FF00; border: none; border-radius: 8px; font-weight: bold; }
+</style>
+</head>
+<body>
+  <h2>Ponsly — Debug getLaunchedToken</h2>
+  <input id="addr" value="0x39dBED3a2bd333467115dE45665cC57F813C4571">
+  <button onclick="run()">Cek</button>
+  <pre id="out">(hasil bakal muncul di sini)</pre>
+
+  <script src="pons.js"></script>
+  <script src="pons-chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="pons-trades-store.js"></script>
+  <script src="pons-v2-indexer.js"></script>
+  <script>
+    async function run() {
+      const out = document.getElementById('out');
+      const addr = document.getElementById('addr').value.trim();
+      out.textContent = 'Loading...';
+      try {
+        const result = await window.PonslyV2Trades.getLaunchedToken(addr);
+        out.textContent = JSON.stringify(
+          result,
+          (k, v) => typeof v === 'bigint' ? v.toString() : v,
+          2
+        );
+      } catch (e) {
+        out.textContent = 'ERROR: ' + (e && e.message ? e.message : e);
+      }
+    }
+  </script>
+</body>
+</html>
